@@ -134,7 +134,7 @@ end
 
 # config/database.yml
 ########################################
-inject_into_file 'config/database.yml', after: 'default: &default adapter: postgresql encoding: unicode' do
+inject_into_file 'config/database.yml', after: 'encoding: unicode' do
   <<~RUBY
     host: db
     user: postgres
