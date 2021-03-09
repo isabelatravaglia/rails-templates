@@ -1,18 +1,5 @@
 run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
 
-# config/database.yml
-########################################
-inject_into_file 'config/database.yml', after: 'default: &default
-adapter: postgresql
-encoding: unicode' do
-  <<~RUBY
-    host: db
-    user: postgres
-    password: postgres
-  RUBY
-end
-
-
 # GEMFILE
 ########################################
 inject_into_file 'Gemfile', before: 'group :development, :test do' do
@@ -143,4 +130,14 @@ after_bundle do
 
   # Fix puma config
   gsub_file('config/puma.rb', 'pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }', '# pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }')
+end
+
+# config/database.yml
+########################################
+inject_into_file 'config/database.yml', after: 'default: &default adapter: postgresql encoding: unicode' do
+  <<~RUBY
+    host: db
+    user: postgres
+    password: postgres
+  RUBY
 end
