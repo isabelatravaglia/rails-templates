@@ -134,10 +134,10 @@ end
 
 # config/database.yml
 ########################################
-inject_into_file 'config/database.yml', after: 'encoding: unicode\n' do
+inject_into_file "config/database.yml", after: "encoding: unicode\n" do
   <<-RUBY
-    host: db
-    user: postgres
-    password: postgres
+host: db
+user: postgres
+password: postgres
   RUBY
 end
