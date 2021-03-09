@@ -141,3 +141,12 @@ inject_into_file 'config/database.yml', after: 'encoding: unicode' do
     password: postgres
   RUBY
 end
+
+#test
+inject_into_file 'config/lala.yml', after: 'encoding: unicode' do
+  <<~RUBY
+    host: db
+    user: postgres
+    password: postgres
+  RUBY
+end
