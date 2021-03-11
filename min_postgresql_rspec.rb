@@ -10,11 +10,18 @@ inject_into_file 'Gemfile', before: 'group :development, :test do' do
   RUBY
 end
 
-inject_into_file 'Gemfile', after: 'group :development, :test do' do
+inject_into_file "Gemfile", after: "group :development, :test do\n" do
   <<-RUBY
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'dotenv-rails'
+  # The RSpec testing framework
+  gem 'rspec-rails'
+  # Capybara, the library that allows us to interact with the browser using Ruby
+  gem 'capybara'
+  # The following two gems aid with the nuts and bolts
+  # of interacting with the browser.
+  gem 'selenium-webdriver'
   RUBY
 end
 
@@ -71,6 +78,7 @@ after_bundle do
   rails_command 'db:drop db:create db:migrate'
   generate('simple_form:install', '--bootstrap')
   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
+  generate('rspec:install')
 
   # Routes
   ########################################
