@@ -144,3 +144,36 @@ inject_into_file "config/database.yml", after: "encoding: unicode\n" do
   password: postgres
   RUBY
 end
+
+# spec/rails_helper.rb
+########################################
+inject_into_file "spec/rails_helper.rb", after: "RSpec.configure do |config|\n" do
+  <<-RUBY
+  config.before(:each, type: :system) do
+    driven_by :chrome_headless
+
+    Capybara.app_host = "http://#{IPSocket.getaddress(Socket.gethostname)}:3001"
+    Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
+    Capybara.server_port = 3001
+  end
+  RUBY
+end
+
+inject_into_file "spec/rails_helper.rb", after: "Rails is not loaded until this point!\n" do
+  <<-RUBY
+Capybara.register_driver :chrome_headless do |app|
+  chrome_capabilities = ::Selenium::WebDriver::Remote::Capabilities.chrome('goog:chromeOptions' => { 'args': %w[no-sandbox headless disable-gpu window-size=1400,1400] }, "takesScreenshot": true)
+
+  if ENV['HUB_URL']
+    Capybara::Selenium::Driver.new(app,
+                                    browser: :remote,
+                                    url: ENV['HUB_URL'],
+                                    desired_capabilities: chrome_capabilities)
+  else
+    Capybara::Selenium::Driver.new(app,
+                                    browser: :chrome,
+                                    desired_capabilities: chrome_capabilities)
+  end
+end
+  RUBY
+end
