@@ -140,8 +140,8 @@ after_bundle do
     <<-RUBY
   config.before(:each, type: :system) do
     driven_by :chrome_headless
-
-    Capybara.app_host = "http://#{IPSocket.getaddress(Socket.gethostname)}:3001"
+    #added backslash to prevent interpolation when injecting
+    Capybara.app_host = "http://\#{IPSocket.getaddress(Socket.gethostname)}:3001"
     Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
     Capybara.server_port = 3001
   end
