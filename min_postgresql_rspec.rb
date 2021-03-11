@@ -17,11 +17,6 @@ inject_into_file "Gemfile", after: "group :development, :test do\n" do
   gem 'dotenv-rails'
   # The RSpec testing framework
   gem 'rspec-rails'
-  # Capybara, the library that allows us to interact with the browser using Ruby
-  gem 'capybara'
-  # The following two gems aid with the nuts and bolts
-  # of interacting with the browser.
-  gem 'selenium-webdriver'
   RUBY
 end
 
