@@ -133,22 +133,11 @@ after_bundle do
 
   # Fix puma config
   gsub_file('config/puma.rb', 'pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }', '# pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }')
-end
 
-# config/database.yml
-########################################
-inject_into_file "config/database.yml", after: "encoding: unicode\n" do
-  <<-RUBY
-  host: db
-  user: postgres
-  password: postgres
-  RUBY
-end
-
-# spec/rails_helper.rb
-########################################
-inject_into_file "spec/rails_helper.rb", after: "RSpec.configure do |config|\n" do
-  <<-RUBY
+    # spec/rails_helper.rb
+  ########################################
+  inject_into_file "spec/rails_helper.rb", after: "RSpec.configure do |config|\n" do
+    <<-RUBY
   config.before(:each, type: :system) do
     driven_by :chrome_headless
 
@@ -156,11 +145,11 @@ inject_into_file "spec/rails_helper.rb", after: "RSpec.configure do |config|\n" 
     Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
     Capybara.server_port = 3001
   end
-  RUBY
-end
+    RUBY
+  end
 
-inject_into_file "spec/rails_helper.rb", after: "Rails is not loaded until this point!\n" do
-  <<-RUBY
+  inject_into_file "spec/rails_helper.rb", after: "Rails is not loaded until this point!\n" do
+    <<-RUBY
 Capybara.register_driver :chrome_headless do |app|
   chrome_capabilities = ::Selenium::WebDriver::Remote::Capabilities.chrome('goog:chromeOptions' => { 'args': %w[no-sandbox headless disable-gpu window-size=1400,1400] }, "takesScreenshot": true)
 
@@ -175,5 +164,17 @@ Capybara.register_driver :chrome_headless do |app|
                                     desired_capabilities: chrome_capabilities)
   end
 end
+    RUBY
+  end
+
+end
+
+# config/database.yml
+########################################
+inject_into_file "config/database.yml", after: "encoding: unicode\n" do
+  <<-RUBY
+  host: db
+  user: postgres
+  password: postgres
   RUBY
 end
